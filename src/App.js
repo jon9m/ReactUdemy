@@ -17,19 +17,29 @@ class App extends Component {
     //this.state.persons[0].name = "Malaka"; //Don't do this
     this.setState({
       persons: [
-      { name: 'malaka', age: 36 },
-      { name: 'samara', age: 37 },
-      { name: 'nilupa thushari', age: 30 }
-    ]
+        { name: 'malaka', age: 36 },
+        { name: 'samara', age: 37 },
+        { name: 'nilupa thushari', age: 30 }
+      ]
     })
   }
-  resetNamehandler = () => {
+  resetNamehandler = (newName) => {
     this.setState({
       persons: [
-      { name: 'manoj', age: 38 },
-      { name: 'sam', age: 37 },
-      { name: 'nilupa', age: 33 }
-    ]
+        { name: newName, age: 38 },
+        { name: 'sam', age: 37 },
+        { name: 'nilupa', age: 33 }
+      ]
+    })
+  }
+
+  nameChangehandler = (event) => {
+    this.setState({
+      persons: [
+        { name: event.target.value, age: 38 },
+        { name: 'sam', age: 37 },
+        { name: 'nilupa', age: 33 }
+      ]
     })
   }
 
@@ -45,11 +55,12 @@ class App extends Component {
         </p>
         <button className="btn btn-info" onClick={this.changeNamehandler}>Switch Name</button>
 
-        <Person name="sam" age="38"></Person>
+        <Person name="sam" age="38" onNameChange={(event) => this.nameChangehandler(event)}></Person>
         <Person name={this.state.persons[0].name} age={this.state.persons[0].age}>My name is jon!!!</Person>
         <Person name={this.state.persons[1].name} age={this.state.persons[1].age}></Person>
         <p>Invoke component click from outside</p>
-        <Person clickme={this.resetNamehandler} name={this.state.persons[2].name} age={this.state.persons[2].age}><button className="btn btn-warning">Click Me</button></Person>
+        {/*<Person clickme={this.resetNamehandler.bind(this, 'Malaka')} name={this.state.persons[2].name} age={this.state.persons[2].age}><button className="btn btn-warning">Click Me</button></Person>*/}
+        <Person clickme={() => { this.resetNamehandler('Malaka!!!') }} name={this.state.persons[2].name} age={this.state.persons[2].age}><button className="btn btn-warning">Click Me</button></Person>
 
       </div>
     );
