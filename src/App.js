@@ -7,10 +7,11 @@ import Person from './Person/Person';
 class App extends Component {
   state = {
     persons: [
-      { name: 'manoj', age: 38 },
-      { name: 'sam', age: 37 },
-      { name: 'nilupa', age: 33 }
-    ]
+      { uniqueid: '1', name: 'manoj', age: 38 },
+      { uniqueid: '2', name: 'sam', age: 37 },
+      { uniqueid: '3', name: 'nilupa', age: 33 }
+    ],
+    showPersons: true
   }
 
   changeNamehandler = () => {
@@ -33,35 +34,57 @@ class App extends Component {
     })
   }
 
-  nameChangehandler = (event) => {
-    this.setState({
-      persons: [
-        { name: event.target.value, age: 38 },
-        { name: 'sam', age: 37 },
-        { name: 'nilupa', age: 33 }
-      ]
-    })
+  nameChangehandler = (event, id) => {
+    const currPersonIndex = this.state.persons.findIndex((person) => {
+      if (person.uniqueid == id) {
+        return true;
+      }
+    });
+    const person = { 
+      ...this.state.persons[currPersonIndex]   //copy 
+    }
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];  //copy
+    persons[currPersonIndex] = person;
+    
+    this.setState({ persons: persons })
+  }
+
+  togglePersons = () => {
+    let currState = this.state.showPersons;
+    this.setState({ showPersons: !currState });
+  }
+
+  deletePersonHandler = (index) => {
+    // const persons = this.state.persons.slice;   //Always use a copy of original data 
+    const persons = [...this.state.persons];
+    persons.splice(index, 1);
+    this.setState({ persons: persons })
   }
 
   render() {
+    let personsDtl = null;
+    if (this.state.showPersons) {
+      personsDtl = (
+        <div>
+          {this.state.persons.map((person, index) => {
+            return <Person
+              key={person.uniqueid}
+              click={() => this.deletePersonHandler(index)}
+              name={person.name} age={person.age}
+              onNameChange={(event) => this.nameChangehandler(event, person.uniqueid)}>My name is {person.name}</Person>
+          })}
+        </div>
+      )
+    }
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button className="btn btn-info" onClick={this.changeNamehandler}>Switch Name</button>
-
-        <Person name="sam" age="38" onNameChange={(event) => this.nameChangehandler(event)}></Person>
-        <Person name={this.state.persons[0].name} age={this.state.persons[0].age}>My name is jon!!!</Person>
-        <Person name={this.state.persons[1].name} age={this.state.persons[1].age}></Person>
-        <p>Invoke component click from outside</p>
-        {/*<Person clickme={this.resetNamehandler.bind(this, 'Malaka')} name={this.state.persons[2].name} age={this.state.persons[2].age}><button className="btn btn-warning">Click Me</button></Person>*/}
-        <Person clickme={() => { this.resetNamehandler('Malaka!!!') }} name={this.state.persons[2].name} age={this.state.persons[2].age}><button className="btn btn-warning">Click Me</button></Person>
-
+        <button className="btn btn-info m-1" onClick={this.changeNamehandler}>Switch Name</button>
+        <button className="btn btn-info" onClick={this.togglePersons}>Toggle Persons</button>
+        {personsDtl}
       </div>
     );
   }

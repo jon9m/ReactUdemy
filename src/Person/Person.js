@@ -7,10 +7,19 @@ const person = (props) => {
     }
 
     return (
-        <div onClick={props.clickme} className="card my7" style={style}>
-            <input type="text" onChange={props.onNameChange} defaultValue={props.name}/>
-            <p className="card-title">Hi from a function to {props.name}</p>
-            <span className="card-text">my age is {props.age}</span>
+        <div onClick={props.click} className="card" style={style}>
+            <input type="text" onChange={props.onNameChange} defaultValue={props.name} />
+            {
+                props.name ?
+                    <p className="card-title">Hi from a function to {props.name}</p>
+                    : 'Hi from a function.'
+            }
+            {
+                props.age ?
+                    <span className="card-text">My age is {props.age}</span>
+                    : null
+            }
+
             <p className="card-text">{props.children}</p>
         </div>
     );
