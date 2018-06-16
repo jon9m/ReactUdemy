@@ -1,38 +1,24 @@
 import React from 'react';
-import Radium from 'radium';
+import personclasses from './Person.css';
+
+import classNames from 'classnames';
+import bootstrap from '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const person = (props) => {
-    let style = {
-        margin: '5px auto',
-        backgroundColor: '#ccc'
-    }
-    let btnStyle = {
-        float: 'right',
-        ':hover': {
-            backgroundColor: 'red',
-            color: 'black'
-        }
-    }
-    const mediaQuery = {
-        '@media(min-width:800px)': {
-            width: '750px'
-        }
-    }
-
     return (
-        <div className="card" style={[style, mediaQuery]}>
+        <div className={classNames({ [personclasses.divStyle]: true, [bootstrap.card]: true })}>
             <div>
-                <button className="badge badge-light" onClick={props.click} style={btnStyle}>x</button>
+                <button className={classNames({ [personclasses.btnStyle]: true })} onClick={props.click}>x</button>
             </div>
             <input type="text" onChange={props.onNameChange} defaultValue={props.name} />
             {
                 props.name ?
-                    <p className="card-title">Hi from a function to {props.name}</p>
+                    <p className={[bootstrap['card-title']]}>Hi from a function to {props.name}</p>
                     : 'Hi from a function.'
             }
             {
                 props.age ?
-                    <span className="card-text">My age is {props.age}</span>
+                    <span className={[bootstrap['card-text']]}>My age is {props.age}</span>
                     : null
             }
 
@@ -41,4 +27,4 @@ const person = (props) => {
     );
 }
 
-export default Radium(person);
+export default person;

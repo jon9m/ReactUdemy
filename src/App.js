@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
+import allclasses from './App.css';
 import Person from './Person/Person';
 //Person must start with a capital letter
 
-import Radium, { StyleRoot } from 'radium';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
+import classNames from 'classnames';
 
 class App extends Component {
 
@@ -68,15 +68,6 @@ class App extends Component {
   }
 
   render() {
-    let style = {
-      backgroundColor: '#ccc'
-    }
-    let btnstyle = {
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'pink'
-      }
-    }
 
     let personsDtl = null;
     if (this.state.showPersons) {
@@ -84,8 +75,8 @@ class App extends Component {
         <div>
           {this.state.persons.map((person, index) => {
             /**key has to be on outer element of map method**/
-            return <ErrorBoundary key={person.uniqueid}> 
-              <Person                
+            return <ErrorBoundary key={person.uniqueid}>
+              <Person
                 click={() => this.deletePersonHandler(index)}
                 name={person.name} age={person.age}
                 onNameChange={(event) => this.nameChangehandler(event, person.uniqueid)}>My name is {person.name}
@@ -94,23 +85,16 @@ class App extends Component {
           })}
         </div>
       )
-      style.backgroundColor = '#F00';
-      btnstyle[':hover'] = {
-        backgroundColor: 'black',
-        color: 'red'
-      }
     }
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <button key="btn1" className="btn btn-info m-1" onClick={this.changeNamehandler} style={btnstyle}>Switch Name</button>
-          <button key="btn2" className="btn btn-info" onClick={this.togglePersons} style={[style, btnstyle]}>Toggle Persons</button>
-          {personsDtl}
-        </div>
-      </StyleRoot>
+      <div className={allclasses.App}>
+        <button key="btn1" className={classNames({ [allclasses.btnstyle]: true })} onClick={this.changeNamehandler}>Switch Name</button>
+        <button key="btn2" className={allclasses.btnstyle} onClick={this.togglePersons}>Toggle Persons</button>
+        {personsDtl}
+      </div>
     );
   }
 }
 
-export default Radium(App);
+export default App;
