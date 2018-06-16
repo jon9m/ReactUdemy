@@ -4,6 +4,7 @@ import Person from './Person/Person';
 //Person must start with a capital letter
 
 import Radium, { StyleRoot } from 'radium';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 
 class App extends Component {
 
@@ -20,18 +21,18 @@ class App extends Component {
     //this.state.persons[0].name = "Malaka"; //Don't do this
     this.setState({
       persons: [
-        { name: 'malaka', age: 36 },
-        { name: 'samara', age: 37 },
-        { name: 'nilupa thushari', age: 30 }
+        { uniqueid: '1', name: 'malaka', age: 36 },
+        { uniqueid: '2', name: 'samara', age: 37 },
+        { uniqueid: '3', name: 'nilupa thushari', age: 30 }
       ]
     })
   }
   resetNamehandler = (newName) => {
     this.setState({
       persons: [
-        { name: newName, age: 38 },
-        { name: 'sam', age: 37 },
-        { name: 'nilupa', age: 33 }
+        { uniqueid: '1', name: newName, age: 38 },
+        { uniqueid: '2', name: 'sam', age: 37 },
+        { uniqueid: '3', name: 'nilupa', age: 33 }
       ]
     })
   }
@@ -82,11 +83,14 @@ class App extends Component {
       personsDtl = (
         <div>
           {this.state.persons.map((person, index) => {
-            return <Person
-              key={person.uniqueid}
-              click={() => this.deletePersonHandler(index)}
-              name={person.name} age={person.age}
-              onNameChange={(event) => this.nameChangehandler(event, person.uniqueid)}>My name is {person.name}</Person>
+            /**key has to be on outer element of map method**/
+            return <ErrorBoundary key={person.uniqueid}> 
+              <Person                
+                click={() => this.deletePersonHandler(index)}
+                name={person.name} age={person.age}
+                onNameChange={(event) => this.nameChangehandler(event, person.uniqueid)}>My name is {person.name}
+              </Person>
+            </ErrorBoundary>
           })}
         </div>
       )
