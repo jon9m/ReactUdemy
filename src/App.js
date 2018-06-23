@@ -1,12 +1,28 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import allclasses from './App.css';
-import Person from './Person/Person';
+import Persons from './Persons/Persons';
 //Person must start with a capital letter
 
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 import classNames from 'classnames';
 
-class App extends Component {
+export const MyGlobalState = React.createContext(false); 
+
+
+// class App extends Component {
+class App extends PureComponent {
+
+  constructor(props) {
+    super(props);
+    console.log('[App JS] inside constructor', props);
+  }
+
+  componentWillMount() {
+    console.log('[App JS] inside componenet will mount');
+  }
+
+  componentDidMount() {
+    console.log('[App JS] inside componenet did mount');
+  }
 
   state = {
     persons: [
@@ -14,7 +30,8 @@ class App extends Component {
       { uniqueid: '2', name: 'sam', age: 37 },
       { uniqueid: '3', name: 'nilupa', age: 33 }
     ],
-    showPersons: true
+    showPersons: true,
+    authenticated: false
   }
 
   changeNamehandler = () => {
@@ -24,7 +41,8 @@ class App extends Component {
         { uniqueid: '1', name: 'malaka', age: 36 },
         { uniqueid: '2', name: 'samara', age: 37 },
         { uniqueid: '3', name: 'nilupa thushari', age: 30 }
-      ]
+      ],
+      authenticated: true
     })
   }
   resetNamehandler = (newName) => {
@@ -67,31 +85,22 @@ class App extends Component {
     this.setState({ persons: persons })
   }
 
-  render() {
 
-    let personsDtl = null;
+  render() {
+    console.log('[App JS] inside render method');
+
+    let personslist = null;
     if (this.state.showPersons) {
-      personsDtl = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            /**key has to be on outer element of map method**/
-            return <ErrorBoundary key={person.uniqueid}>
-              <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name} age={person.age}
-                onNameChange={(event) => this.nameChangehandler(event, person.uniqueid)}>My name is {person.name}
-              </Person>
-            </ErrorBoundary>
-          })}
-        </div>
-      )
+      personslist = <Persons nameChangehandler={this.nameChangehandler} deletePersonHandler={this.deletePersonHandler} showPersons={this.state.showPersons} persons={this.state.persons}></Persons>
     }
 
     return (
       <div className={allclasses.App}>
         <button key="btn1" className={classNames({ [allclasses.btnstyle]: true })} onClick={this.changeNamehandler}>Switch Name</button>
         <button key="btn2" className={allclasses.btnstyle} onClick={this.togglePersons}>Toggle Persons</button>
-        {personsDtl}
+        <MyGlobalState.Provider value={this.state.authenticated}>
+          {personslist}
+        </MyGlobalState.Provider>
       </div>
     );
   }
